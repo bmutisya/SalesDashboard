@@ -5,7 +5,7 @@ import numpy as np
 import calendar
 import pandas as pd
 
-df = pd.read_excel('sales_data.xlsx')
+df = pd.read_excel('product_sales.xlsx')
 df= df.mask(df == '')
 df.columns = df.columns.str.replace(" ","_")
 #print(df.columns)
@@ -52,7 +52,7 @@ st.title(":bar_chart: Sales Dashboard")
 st.markdown("##")
 
 #TopKPIS
-total_sales = int(df_selection["value"].sum())
+total_sales = int(df_selection["Value"].sum())
 sales_tonnes = round(df_selection["Volume_in_Tonnes"].sum(),1)
 left_column,middle_column,right_column = st.columns(3)
 with left_column:
@@ -70,9 +70,9 @@ st.markdown("---")
 
 #plot a barchart
 #sales_by_salesrep= (df_selection.groupby(by=["Sales_Rep"]).sum()[["value"]].sort_values(by="value"))
-sales_by_salesrep=pd.DataFrame(df_selection.groupby("Sales_Rep")["value"].sum())
+sales_by_salesrep=pd.DataFrame(df_selection.groupby("Sales_Rep")["Value"].sum())
 fig_salesreps = px.bar( sales_by_salesrep,
-                        x=sales_by_salesrep.index,y="value",
+                        x=sales_by_salesrep.index,y="Value",
                         orientation="v",
                         title="<b>Sales by  SalesRep</b>",
                         color_discrete_sequence=["#FF00FF"] *len (sales_by_salesrep),
@@ -86,9 +86,9 @@ fig_salesreps.update_layout(
 #st.plotly_chart(fig_salesreps)
 
 #sales_by_clientcategory= (df_selection.groupby(by=["Client_Category"]).sum()[["value"]].sort_values(by="value"))
-sales_by_clientcategory= pd.DataFrame(df_selection.groupby("Client_Category")["value"].sum())
+sales_by_clientcategory= pd.DataFrame(df_selection.groupby("Client_Category")["Value"].sum())
 fig_clientcategory = px.bar( sales_by_clientcategory,
-                        x=sales_by_clientcategory.index,y="value",
+                        x=sales_by_clientcategory.index,y="Value",
                         orientation="v",
                         title="<b>Sales by Client Category</b>",
                         color_discrete_sequence=["#FF00FF"] *len (sales_by_clientcategory),
@@ -124,6 +124,10 @@ fig_unique_clients=px.bar(jupi,x=jupi.index,y=jupi.Client,orientation="v",
                         title="<b>Unique Clients Sold To</b>",
                         color_discrete_sequence=["#FF00FF"] *len (jupi),
                         template="plotly_white")
+fig_unique_clients.update_layout(
+    plot_bgcolor="rgba(0,0,0,0)",
+    yaxis= (dict(showgrid=False))
+)
 st.plotly_chart(fig_unique_clients)
 
 
